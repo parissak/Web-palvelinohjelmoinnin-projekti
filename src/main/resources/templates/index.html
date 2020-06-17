@@ -1,13 +1,16 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-    <head>
+    <head lang="en">
         <meta charset="UTF-8" />
-        <title>Hello world</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+        <title>Accounts</title>
     </head>
+
+
     <body>
-
-        <h1 th:text="${'Hello ' + message}">Hello world</h1>
-
+        <div th:replace="fragments/navbar :: navbar"></div>
+        <p> HELLO THERE </p>
 
     </body>
 </html>
