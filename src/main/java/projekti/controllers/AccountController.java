@@ -1,5 +1,7 @@
 package projekti.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import projekti.models.Skill;
 
 import projekti.services.AccountService;
 import projekti.services.SkillService;
+import projekti.repositories.ConnectionRequestRepository;
 
 @Controller
 public class AccountController {
@@ -25,6 +28,8 @@ public class AccountController {
     @Autowired
     private SkillService skillService;
 
+    @Autowired
+    private ConnectionRequestRepository connectionRepository;
 
     //list all profiles
     @GetMapping("/profiles")
@@ -46,6 +51,8 @@ public class AccountController {
         Account account = accountService.getOne(username);
         model.addAttribute("account", account);
         model.addAttribute("skills", skillService.listSortedSkills(account));
+        model.addAttribute("requests", connectionRepository.findByaccountTo(account));
+        
         return "wall";
     }
 
@@ -55,7 +62,7 @@ public class AccountController {
         if (bindingResult.hasErrors()) {
             return "register";
         }
-        accountService.create(account);
+        accountService.save(account);
         return "redirect:/register";
     }
 

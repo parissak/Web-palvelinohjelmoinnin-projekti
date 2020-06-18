@@ -19,7 +19,7 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    public void create(Account account) {
+    public void save(Account account) {
         accountRepository.save(account);
     }
 

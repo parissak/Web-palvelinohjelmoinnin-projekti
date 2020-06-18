@@ -26,6 +26,7 @@
                 </div>
             </div>
 
+            <!--list users -->
             <table class="table table-responsive table-sm table-hover">
                 <thead class="thead-light">
                     <tr class="d-flex">
@@ -38,10 +39,10 @@
                         <td class="col-sm">
                             <a class="text-dark" th:href="@{/profiles/{name}(name=${account.username})}" th:text="${account.username}"></a>
                         </td>
-                        <td class="">
-                            <form method="">
+                        <td class="col-sm">
+                            <form method="POST" th:action="@{/profiles/sendRequest/{name}(name=${account.username})}">
                                 <div class="input-group">
-                                    <input class="btn btn-outline-dark btn-sm" type="submit" value="Send Request"></input>
+                                    <input class="btn btn-outline-dark btn-sm" type="submit" value="Send Connection Request"></input>
                                 </div>
                             </form>
                         </td>

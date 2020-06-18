@@ -13,7 +13,7 @@
 
         <!-- account data -->
         <div th:each="data : ${account}" class="container mb-5">
-            <h2>My Profile</h2>
+            <h2>Profile</h2>
             <div class="row">
                 <div class="col-sm-2">
                     <label class="font-weight-bold">Name</label>
@@ -32,15 +32,47 @@
             </div>
         </div>
 
+        <!-- connections -->
         <div class="container mb-5">
             <h2>Connections</h2>
-        </div>
+            <div class="container mb-4"> 
+                <div th:each="data : ${account.connections}" class="row">
+                    <div class="col-sm-1">
+                        <a class="text-dark" th:href="@{/profiles/{name}(name=${data.username})}" th:text="${data.username}"></a>
+                    </div>
+                    <div class="col-sm-1">
+                        <form method="POST" th:action="@{/profiles/disconnect/}">
+                            <div class="input-group">
+                                <button th:name="username" th:value="${data.username}" type="submit" class="btn btn-outline-danger btn-sm">Disconnect</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
-        <div class="container mb-5">
-            <h2>Skills</h2>
+            <h4>Requests</h4>
+            <div th:each="data : ${requests}" class="row mb-5">
+                <div th:text="${data.accountFrom.username}" class="col-sm-1"> </div>
+                <div class="col-sm-1">
+                    <form method="POST" th:action="@{/profiles/acceptRequest}">
+                        <div class="input-group">
+                            <button th:name="username" th:value="${data.accountFrom.username}" type="submit" class="btn btn-outline-primary btn-sm">Accept</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-sm-1">
+                    <form method="POST" th:action="@{/profiles/rejectRequest}">
+                        <div class="input-group">
+                            <button th:name="username" th:value="${data.accountFrom.username}" type="submit" class="btn btn-outline-danger btn-sm">Reject</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
             <!--list top three skills -->
-            <div class="container mb-4">
+            <h2>Skills</h2>
+            <div class="container mt-4">
                 <div th:each="data, iterStat : ${skills}" th:if="${iterStat.index < 3}" class="row">
                     <div class="col-sm-2">
                         <b th:text="${data.description}"></b>
