@@ -1,12 +1,13 @@
 package projekti.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import projekti.models.Account;
-import projekti.models.Skill;
 import projekti.repositories.AccountRepository;
 
 @Service
@@ -15,11 +16,15 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     public List<Account> findAll() {
         return accountRepository.findAll();
     }
 
     public void save(Account account) {
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
         accountRepository.save(account);
     }
 
@@ -34,5 +39,11 @@ public class AccountService {
         List<Account> results = accountRepository.findByUsernameContaining(username);
         return results;
     }
- 
+
+    public String getActiveAccount() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        return username;
+    }
+
 }

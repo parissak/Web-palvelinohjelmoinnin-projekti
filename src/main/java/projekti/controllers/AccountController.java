@@ -1,7 +1,5 @@
 package projekti.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,10 +47,14 @@ public class AccountController {
     @GetMapping("/profiles/{username}")
     public String getOneProfile(@ModelAttribute Skill skill, @PathVariable String username, Model model) {
         Account account = accountService.getOne(username);
+        String activeUser = accountService.getActiveAccount();
+
         model.addAttribute("account", account);
         model.addAttribute("skills", skillService.listSortedSkills(account));
-        model.addAttribute("requests", connectionRepository.findByaccountTo(account));
-        
+
+        if (account.getUsername().equals(activeUser)) {
+            model.addAttribute("requests", connectionRepository.findByaccountTo(account));
+        }
         return "wall";
     }
 
@@ -63,13 +65,19 @@ public class AccountController {
             return "register";
         }
         accountService.save(account);
-        return "redirect:/register";
+        return "redirect:/profiles/mypage";
     }
 
     //return registerform
     @GetMapping("/register")
     public String getRegisterForm(@ModelAttribute Account account) {
         return "register";
+    }
+
+    //return wall
+    @GetMapping("/profiles/mypage")
+    public String getMyProfile(@ModelAttribute Account account) {
+        return "redirect:/profiles/" + accountService.getActiveAccount();
     }
 
 }

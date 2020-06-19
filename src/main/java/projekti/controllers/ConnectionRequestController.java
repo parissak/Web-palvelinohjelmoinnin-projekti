@@ -1,6 +1,8 @@
 package projekti.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,19 +25,20 @@ public class ConnectionRequestController {
     @PostMapping("/profiles/sendRequest/{username}")
     public String sendRequest(@PathVariable String username) {
         ConnectionRequest connection = new ConnectionRequest();
-        Account from = accountService.getOne("sender");
-        Account to = accountService.getOne("test");
+        String activeUser = accountService.getActiveAccount();
+        Account from = accountService.getOne(activeUser);
+        Account to = accountService.getOne(username);
         connection.setAccountFrom(from);
         connection.setAccountTo(to);
         connectionRepository.save(connection);
-
         return "redirect:/profiles";
     }
 
     @PostMapping("/profiles/acceptRequest")
     public String acceptRequest(@RequestParam String username) {
-        Account from = accountService.getOne("sender");
-        Account to = accountService.getOne("test");
+        Account from = accountService.getOne(username);
+        String activeUser = accountService.getActiveAccount();
+        Account to = accountService.getOne(activeUser);
         ConnectionRequest connection = connectionRepository.findByAccountToAndAccountFrom(to, from);
 
         //connect two accounts
@@ -49,8 +52,9 @@ public class ConnectionRequestController {
 
     @PostMapping("/profiles/rejectRequest")
     public String rejectRequest(@RequestParam String username) {
-        Account from = accountService.getOne("sender");
-        Account to = accountService.getOne("test");
+        Account from = accountService.getOne(username);
+        String activeUser = accountService.getActiveAccount();
+        Account to = accountService.getOne(activeUser);
         ConnectionRequest connection = connectionRepository.findByAccountToAndAccountFrom(to, from);
         connectionRepository.delete(connection);
 
@@ -59,8 +63,9 @@ public class ConnectionRequestController {
 
     @PostMapping("/profiles/disconnect/")
     public String disconnect(@RequestParam String username) {
-        Account from = accountService.getOne("sender");
-        Account to = accountService.getOne("test");
+        String activeUser = accountService.getActiveAccount();
+        Account from = accountService.getOne(activeUser);
+        Account to = accountService.getOne(username);
         to.getConnections().remove(from);
         from.getConnections().remove(to);
         accountService.save(to);

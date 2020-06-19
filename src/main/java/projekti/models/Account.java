@@ -29,7 +29,6 @@ public class Account extends AbstractPersistable<Long> {
     private String name;
 
     @NotEmpty
-    @Size(min = 1, max = 20)
     private String password;
 
     @NotEmpty
