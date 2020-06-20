@@ -35,7 +35,7 @@
         <!-- connections -->
         <div class="container mb-5">
             <h2>Connections</h2>
-            <div class="container mb-4"> 
+            <div class="container mb-4">
                 <div th:each="data : ${account.connections}" class="row">
                     <div class="col-sm-1">
                         <a class="text-dark" th:href="@{/profiles/{name}(name=${data.username})}" th:text="${data.username}"></a>
@@ -74,8 +74,8 @@
 
             <!--list top three skills -->
             <h2>Skills</h2>
-            <div class="container mt-4 mb-3">
-                <div th:each="data, iterStat : ${skills}" th:if="${iterStat.index < 3}" class="row">
+            <div class="container mt-4 mb-3" th:each="data, iterStat : ${skills}" th:if="${iterStat.index < 3}">
+                <div class="row">
                     <div class="col-sm-2">
                         <b th:text="${data.description}"></b>
                     </div>
@@ -83,19 +83,30 @@
                         <span class="badge badge-pill badge-info" th:text="${data.likes}"></span>
                     </div>
 
-                    <!-- like skill -->
-                    <form method="POST" th:if="${account.username} != ${#authentication.getPrincipal().getUsername()}" th:action="@{/profiles/{username}/likeskill(username=${account.username})}">
-                        <div class="input-group col">
-                            <button name="id" th:value="${data.id}" type="submit" class="btn btn-outline-primary btn-sm">Like</button>
-                        </div>
-                    </form>
-
                     <!--delete skill -->
                     <form method="POST" th:if="${account.username} == ${#authentication.getPrincipal().getUsername()}" th:action="@{/profiles/{username}/deleteskill(username=${account.username})}">
-                        <div class="input-group">
+                        <div class="input-group mr-5">
                             <button name="id" th:value="${data.id}" type="submit" class="btn btn-outline-danger btn-sm">Remove</button>
                         </div>
                     </form>
+
+                    <!-- comment skill -->
+                    <form method="POST" th:if="${account.username} != ${#authentication.getPrincipal().getUsername()}" th:object="${skill}"
+                          th:action="@{/profiles/{username}/skills/{skillId}/comment(username=${account.username},skillId=${data.id})}">
+                        <div class="input-group input-group-sm">
+                            <input name="description" type="text" class="form-control" placeholder="Insert comment.."></input>
+                            <div class="input-group-append">
+                                <button name="addDescription" th:value="${description}" type="submit" class="btn btn-outline-dark btn-sm">Comment</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!--comments-->
+                <div th:each="comments : ${data.skillComments}" class="col">
+                    <div class="row">
+                        <small><em th:text="${comments.description}"> </em></small>
+                    </div>
                 </div>
             </div>
 
@@ -109,10 +120,14 @@
                         <span class="badge badge-pill badge-info" th:text="${data.likes}"></span>
                     </div>
 
-                    <!-- like skill -->
-                    <form method="POST" th:if="${account.username} != ${#authentication.getPrincipal().getUsername()}" th:action="@{/profiles/{username}/likeskill(username=${account.username})}">
-                        <div class="input-group col">
-                            <button name="id" th:value="${data.id}" type="submit" class="btn btn-outline-primary btn-sm">Like</button>
+                    <!-- comment skill -->
+                    <form method="POST" th:if="${account.username} != ${#authentication.getPrincipal().getUsername()}" th:object="${skill}"
+                          th:action="@{/profiles/{username}/skills/{skillId}/comment(username=${account.username},skillId=${data.id})}">
+                        <div class="input-group input-group-sm">
+                            <input name="description" type="text" class="form-control" placeholder="Insert comment.."></input>
+                            <div class="input-group-append">
+                                <button name="addDescription" th:value="${description}" type="submit" class="btn btn-outline-dark btn-sm">Comment</button>
+                            </div>
                         </div>
                     </form>
 

@@ -51,7 +51,13 @@ public class SkillController {
     @PostMapping("/profiles/{username}/likeskill")
     public String likeSkill(@PathVariable String username, @RequestParam Long id) {
         skillService.like(id);
+        return "redirect:/profiles/" + username;
+    }
 
+    @PostMapping("/profiles/{username}/skills/{skillId}/comment")
+    public String commentSkill(@PathVariable String username, @PathVariable Long skillId, @RequestParam String description) {
+        Skill skill = skillService.get(skillId);
+        skillService.commentSkill(skill, description);
         return "redirect:/profiles/" + username;
     }
 
