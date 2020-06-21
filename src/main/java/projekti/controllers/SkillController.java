@@ -47,13 +47,6 @@ public class SkillController {
         return "redirect:/profiles/" + username;
     }
 
-    //get id from "description" button, find id from repo and increase like count
-    @PostMapping("/profiles/{username}/likeskill")
-    public String likeSkill(@PathVariable String username, @RequestParam Long id) {
-        skillService.like(id);
-        return "redirect:/profiles/" + username;
-    }
-
     @PostMapping("/profiles/{username}/skills/{skillId}/comment")
     public String commentSkill(@PathVariable String username, @PathVariable Long skillId, @RequestParam String description) {
         Skill skill = skillService.get(skillId);
