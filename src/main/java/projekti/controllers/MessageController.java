@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import projekti.models.Account;
 import projekti.models.Message;
+import projekti.models.MessageComment;
+import projekti.repositories.MessageCommentRepository;
 import projekti.repositories.MessageRepository;
 import projekti.services.AccountService;
 
@@ -23,7 +25,10 @@ public class MessageController {
     private AccountService accountService;
 
     @Autowired
-    MessageRepository messageRepository;
+    private MessageRepository messageRepository;
+
+    @Autowired
+    private MessageCommentRepository messageCommentRepository;
 
     //return users messages
     @GetMapping("/profiles/profile/messages")
@@ -31,7 +36,6 @@ public class MessageController {
         String username = accountService.getActiveAccount();
         Account account = accountService.getOne(username);
         List<Message> posts = messageRepository.findTop25ByPosterOrPosterInOrderByTimestampDesc(account, account.getConnections());
-
         model.addAttribute("posts", posts);
         model.addAttribute("account", account);
         return "posts";
@@ -49,16 +53,35 @@ public class MessageController {
         return "redirect:/profiles/profile/messages";
     }
 
+    //like message
     @PostMapping("/profiles/username/messages/{messageId}/like")
     public String likeMessage(@PathVariable Long messageId) {
         String username = accountService.getActiveAccount();
         Account account = accountService.getOne(username);
         Message message = messageRepository.getOne(messageId);
-        
+
         if (!message.getLiker().contains(account)) {
             message.getLiker().add(account);
             messageRepository.save(message);
         }
+
+        return "redirect:/profiles/profile/messages";
+    }
+
+    //comment message
+    @PostMapping("/profiles/username/messages/{messageId}/comment")
+    public String commentMessage(@PathVariable Long messageId, @RequestParam String description) {
+        String username = accountService.getActiveAccount();
+        Account account = accountService.getOne(username);
+        Message message = messageRepository.getOne(messageId);
+
+        MessageComment messageComment = new MessageComment();
+        messageComment.setComment(description);
+        messageComment.setPoster(account);
+        messageComment.setTimestamp((LocalDateTime.now()));
+        messageComment.setMessage(message);
+
+        messageCommentRepository.save(messageComment);
 
         return "redirect:/profiles/profile/messages";
     }

@@ -26,11 +26,6 @@
             </form>
         </div>
 
-
-        <!--        <div class="col-2">
-                    <span class="badge badge-pill badge-info" th:text="${#lists.size(post.liker)} + ' likes'"></span>
-                </div>-->
-
         <div class="container mb-5">
             <div class="col mb-4" th:each="post : ${posts}">
 
@@ -39,19 +34,37 @@
 
                     <!--<div class="col mb-4">hello</div>-->
                     <div class="col-2">
-                        <span class="badge badge-pill badge-info" th:text="${#lists.size(post.liker)}">hello</span>
+                        <span class="badge badge-pill badge-info" th:text="${#lists.size(post.liker)}"></span>
                     </div>
 
-                    <div class="col-2" th:if="${post.poster.username} != ${#authentication.getPrincipal().getUsername()}">
-                        <form method="POST" th:action="@{/profiles/username/messages/{messageId}/like(messageId=${post.id})}">
-                            <button name="addMessage" type="submit" class="btn btn-outline-dark btn-sm">Like</button>
+                    <div class="col-2">
+                        <div class="row" th:if="${post.poster.username} != ${#authentication.getPrincipal().getUsername()}">
+                            <form method="POST" th:action="@{/profiles/username/messages/{messageId}/like(messageId=${post.id})}">
+                                <button name="addMessage" type="submit" class="btn btn-outline-dark btn-sm">Like</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <form method="POST" th:action="@{/profiles/username/messages/{messageId}/comment(messageId=${post.id})}">
+                            <div class="input-group input-group-sm"> 
+                                <input name="description" type="text" class="form-control" placeholder="Insert comment.."></input>
+                                <div class="input-group-append">
+                                    <button name="addComment" th:value="${description}" type="submit" class="btn btn-outline-dark btn-sm">Comment</button>
+                                </div>
+                            </div>
                         </form>
                     </div>
-
                 </div>
                 <div class="row" th:text="${post.message}"></div>
+
+                <div class="col" th:each="comment : ${post.comments}">
+                    <div class="row">
+                        <b th:text="${comment.poster.username + ' ' + #temporals.format(comment.timestamp, 'HH:mm dd.MM.yyyy' + ': ')}" ></b>
+                        <span th:text="${comment.comment}"></span>
+                    </div>
+                </div>
             </div>
         </div>
-
     </body>
 </html>

@@ -8,7 +8,9 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
@@ -50,5 +52,5 @@ public class Account extends AbstractPersistable<Long> {
 
     @ManyToMany(mappedBy = "liker")
     private Set<Message> messageliked = new HashSet<>();
-
+    
 }
