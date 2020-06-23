@@ -64,7 +64,7 @@ public class AccountController {
         if (bindingResult.hasErrors()) {
             return "register";
         }
-        accountService.save(account);
+        accountService.create(account);
         return "redirect:/profiles/mypage";
     }
 
@@ -79,5 +79,4 @@ public class AccountController {
     public String getMyProfile(@ModelAttribute Account account) {
         return "redirect:/profiles/" + accountService.getActiveAccount();
     }
-
 }

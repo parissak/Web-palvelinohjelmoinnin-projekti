@@ -23,8 +23,12 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    public void save(Account account) {
+    public void create(Account account) {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
+        accountRepository.save(account);
+    }
+
+    public void update(Account account) {
         accountRepository.save(account);
     }
 

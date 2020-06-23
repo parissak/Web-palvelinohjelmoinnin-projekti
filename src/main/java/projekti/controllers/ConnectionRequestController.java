@@ -44,7 +44,7 @@ public class ConnectionRequestController {
         //connect two accounts
         to.getConnections().add(from);
         from.getConnections().add(to);
-        accountService.save(to);
+        accountService.update(to);
         connectionRepository.delete(connection);
 
         return "redirect:/profiles";
@@ -68,8 +68,8 @@ public class ConnectionRequestController {
         Account to = accountService.getOne(username);
         to.getConnections().remove(from);
         from.getConnections().remove(to);
-        accountService.save(to);
-        accountService.save(from);
+        accountService.update(to);
+        accountService.update(from);
 
         return "redirect:/profiles";
     }
