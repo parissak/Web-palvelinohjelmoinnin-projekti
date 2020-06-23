@@ -23,7 +23,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 public class Message extends AbstractPersistable<Long> {
 
     private String message;
-    private LocalDateTime timestamp;
+    private LocalDateTime stamp;
 
     @ManyToOne
     private Account poster;

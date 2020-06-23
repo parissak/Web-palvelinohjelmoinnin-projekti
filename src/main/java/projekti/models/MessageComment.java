@@ -19,7 +19,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 public class MessageComment extends AbstractPersistable<Long> {
 
     private String comment;
-    private LocalDateTime timestamp;
+    private LocalDateTime stamp;
 
     @ManyToOne
     private Account poster;

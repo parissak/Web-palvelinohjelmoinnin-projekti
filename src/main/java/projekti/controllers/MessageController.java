@@ -37,7 +37,7 @@ public class MessageController {
     @PostMapping("/profiles/{username}/messages")
     public String postMessage(@PathVariable String username, @RequestParam String messageText) {
         Account account = accountService.getOne(username);
-        messageService.saveMessage(messageText, LocalDateTime.now(), account);
+        messageService.saveMessage(messageText, account);
         return "redirect:/profiles/profile/messages";
     }
 
@@ -62,7 +62,7 @@ public class MessageController {
         String username = accountService.getActiveAccount();
         Account account = accountService.getOne(username);
         Message message = messageService.getOneMessage(messageId);
-        messageService.saveComment(description, account, LocalDateTime.now(), message);
+        messageService.saveComment(description, account, message);
 
         return "redirect:/profiles/profile/messages";
     }

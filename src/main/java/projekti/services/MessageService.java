@@ -20,17 +20,17 @@ public class MessageService {
     private MessageCommentRepository messageCommentRepository;
 
     public List<Message> findAssociatedTopSortedMessages(Account account) {
-        return messageRepository.findTop25ByPosterOrPosterInOrderByTimestampDesc(account, account.getConnections());
+        return messageRepository.findTop25ByPosterOrPosterInOrderByStampDesc(account, account.getConnections());
     }
 
     public void updateMessage(Message message) {
         messageRepository.save(message);
     }
 
-    public void saveMessage(String messageText, LocalDateTime stamp, Account poster) {
+    public void saveMessage(String messageText, Account poster) {
         Message message = new Message();
         message.setMessage(messageText);
-        message.setTimestamp(LocalDateTime.now());
+        message.setStamp(LocalDateTime.now());
         message.setPoster(poster);
         updateMessage(message);
     }
@@ -43,13 +43,13 @@ public class MessageService {
         messageCommentRepository.save(messageComment);
     }
 
-    public void saveComment(String description, Account poster, LocalDateTime stamp, Message message) {
+    public void saveComment(String description, Account poster, Message message) {
         MessageComment messageComment = new MessageComment();
         messageComment.setComment(description);
         messageComment.setPoster(poster);
-        messageComment.setTimestamp((LocalDateTime.now()));
+        messageComment.setStamp(LocalDateTime.now());
         messageComment.setMessage(message);
-        updateMessage(message);
+        saveComment(messageComment);
     }
 
 }
