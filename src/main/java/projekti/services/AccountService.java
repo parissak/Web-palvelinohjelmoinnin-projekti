@@ -34,14 +34,12 @@ public class AccountService {
 
     @Transactional
     public Account getOne(String username) {
-        Account account = accountRepository.findByUsername(username);
-        return account;
+        return accountRepository.findByUsername(username);
     }
 
     @Transactional
     public List<Account> getByUsername(String username) {
-        List<Account> results = accountRepository.findByUsernameContaining(username);
-        return results;
+        return accountRepository.findByUsernameContaining(username);
     }
 
     public String getActiveAccount() {

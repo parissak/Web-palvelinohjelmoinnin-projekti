@@ -1,22 +1,18 @@
 package projekti.controllers;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import projekti.models.Account;
 import projekti.models.Message;
 import projekti.models.MessageComment;
-import projekti.repositories.MessageCommentRepository;
-import projekti.repositories.MessageRepository;
 import projekti.services.AccountService;
+import projekti.services.MessageService;
 
 @Controller
 public class MessageController {
@@ -25,18 +21,14 @@ public class MessageController {
     private AccountService accountService;
 
     @Autowired
-    private MessageRepository messageRepository;
-
-    @Autowired
-    private MessageCommentRepository messageCommentRepository;
+    private MessageService messageService;
 
     //return users messages
     @GetMapping("/profiles/profile/messages")
     public String getProfileMessages(Model model) {
         String username = accountService.getActiveAccount();
         Account account = accountService.getOne(username);
-        List<Message> posts = messageRepository.findTop25ByPosterOrPosterInOrderByTimestampDesc(account, account.getConnections());
-        model.addAttribute("posts", posts);
+        model.addAttribute("posts", messageService.findAssociatedTopSortedMessages(account));
         model.addAttribute("account", account);
         return "posts";
     }
@@ -45,11 +37,7 @@ public class MessageController {
     @PostMapping("/profiles/{username}/messages")
     public String postMessage(@PathVariable String username, @RequestParam String messageText) {
         Account account = accountService.getOne(username);
-        Message message = new Message();
-        message.setMessage(messageText);
-        message.setTimestamp(LocalDateTime.now());
-        message.setPoster(account);
-        messageRepository.save(message);
+        messageService.saveMessage(messageText, LocalDateTime.now(), account);
         return "redirect:/profiles/profile/messages";
     }
 
@@ -58,11 +46,11 @@ public class MessageController {
     public String likeMessage(@PathVariable Long messageId) {
         String username = accountService.getActiveAccount();
         Account account = accountService.getOne(username);
-        Message message = messageRepository.getOne(messageId);
+        Message message = messageService.getOneMessage(messageId);
 
         if (!message.getLiker().contains(account)) {
             message.getLiker().add(account);
-            messageRepository.save(message);
+            messageService.updateMessage(message);
         }
 
         return "redirect:/profiles/profile/messages";
@@ -73,15 +61,8 @@ public class MessageController {
     public String commentMessage(@PathVariable Long messageId, @RequestParam String description) {
         String username = accountService.getActiveAccount();
         Account account = accountService.getOne(username);
-        Message message = messageRepository.getOne(messageId);
-
-        MessageComment messageComment = new MessageComment();
-        messageComment.setComment(description);
-        messageComment.setPoster(account);
-        messageComment.setTimestamp((LocalDateTime.now()));
-        messageComment.setMessage(message);
-
-        messageCommentRepository.save(messageComment);
+        Message message = messageService.getOneMessage(messageId);
+        messageService.saveComment(description, account, LocalDateTime.now(), message);
 
         return "redirect:/profiles/profile/messages";
     }

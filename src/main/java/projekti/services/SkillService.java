@@ -39,9 +39,7 @@ public class SkillService {
 
     @Transactional
     public List<Skill> listSortedSkills(Account account) {
-        List<Skill> results = skillRepository.findByAccount_idOrderByLikesDesc(account.getId());
-
-        return results;
+        return skillRepository.findByAccount_idOrderByLikesDesc(account.getId());
     }
 
     public void commentSkill(Skill skill, String description) {

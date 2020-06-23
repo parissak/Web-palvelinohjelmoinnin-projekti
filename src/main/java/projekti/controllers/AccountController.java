@@ -16,6 +16,7 @@ import projekti.models.Skill;
 import projekti.services.AccountService;
 import projekti.services.SkillService;
 import projekti.repositories.ConnectionRequestRepository;
+import projekti.services.ConnectionService;
 
 @Controller
 public class AccountController {
@@ -27,7 +28,7 @@ public class AccountController {
     private SkillService skillService;
 
     @Autowired
-    private ConnectionRequestRepository connectionRepository;
+    private ConnectionService connectionService;
 
     //list all profiles
     @GetMapping("/profiles")
@@ -53,7 +54,7 @@ public class AccountController {
         model.addAttribute("skills", skillService.listSortedSkills(account));
 
         if (account.getUsername().equals(activeUser)) {
-            model.addAttribute("requests", connectionRepository.findByaccountTo(account));
+            model.addAttribute("requests", connectionService.getConnectionRequests(account));
         }
         return "wall";
     }
