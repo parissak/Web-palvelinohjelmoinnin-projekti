@@ -15,7 +15,6 @@ import projekti.models.Skill;
 
 import projekti.services.AccountService;
 import projekti.services.SkillService;
-import projekti.repositories.ConnectionRequestRepository;
 import projekti.services.ConnectionService;
 
 @Controller
@@ -48,12 +47,11 @@ public class AccountController {
     @GetMapping("/profiles/{username}")
     public String getOneProfile(@ModelAttribute Skill skill, @PathVariable String username, Model model) {
         Account account = accountService.getOne(username);
-        String activeUser = accountService.getActiveAccount();
-
         model.addAttribute("account", account);
         model.addAttribute("skills", skillService.listSortedSkills(account));
 
-        if (account.getUsername().equals(activeUser)) {
+        Account activeUser = accountService.getActiveAccount();
+        if (account.getUsername().equals(activeUser.getUsername())) {
             model.addAttribute("requests", connectionService.getConnectionRequests(account));
         }
         return "wall";
@@ -78,6 +76,7 @@ public class AccountController {
     //return wall
     @GetMapping("/profiles/mypage")
     public String getMyProfile(@ModelAttribute Account account) {
-        return "redirect:/profiles/" + accountService.getActiveAccount();
+        String activeUsername = accountService.getActiveAccount().getUsername();
+        return "redirect:/profiles/" + activeUsername;
     }
 }

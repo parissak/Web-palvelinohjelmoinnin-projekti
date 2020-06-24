@@ -16,7 +16,7 @@
 
         <div class="container mb-5">
             <h5>Add new message</h5>
-            <form method="POST" th:action="@{/profiles/{username}/messages(username=${account.username})}" th:object="${message}">
+            <form method="POST" th:action="@{/profiles/username/messages/sendMessage}" th:object="${message}">
                 <div class="input-group">
                     <input name="messageText" type="text" class="form-control  " placeholder="Insert text.."></input>
                     <div class="input-group-append">
@@ -32,11 +32,11 @@
                 <div class="row justify-content-start"> 
                     <b th:text="${post.poster.username + ', ' + #temporals.format(post.stamp, 'HH:mm dd.MM.yyyy')}"></b>
 
-                    <!--<div class="col mb-4">hello</div>-->
                     <div class="col-2">
                         <span class="badge badge-pill badge-info" th:text="${#lists.size(post.liker)}"></span>
                     </div>
 
+                    <!-- like -->
                     <div class="col-2">
                         <div class="row" th:if="${post.poster.username} != ${#authentication.getPrincipal().getUsername()}">
                             <form method="POST" th:action="@{/profiles/username/messages/{messageId}/like(messageId=${post.id})}">
@@ -46,7 +46,7 @@
                     </div>
 
                     <div class="col">
-                        <form method="POST" th:action="@{/profiles/username/messages/{messageId}/comment(messageId=${post.id})}">
+                        <form method="POST" th:action="@{/profiles/{username}/messages/{messageId}/comment(username=${account.username}, messageId=${post.id})}">
                             <div class="input-group input-group-sm"> 
                                 <input name="description" type="text" class="form-control" placeholder="Insert comment.."></input>
                                 <div class="input-group-append">
@@ -61,7 +61,7 @@
                 <div class="col" th:each="comment : ${post.comments}">
                     <div class="row">
                         <b th:text="${comment.poster.username + ' ' + #temporals.format(comment.stamp, 'HH:mm dd.MM.yyyy' + ': ')}" ></b>
-                        <span th:text="${comment.comment}"></span>
+                        <p class="text-left mb-0" th:text= "${comment.comment}"></p>
                     </div>
                 </div>
             </div>

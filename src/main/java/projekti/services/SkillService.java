@@ -27,8 +27,7 @@ public class SkillService {
         return skill;
     }
 
-    public void create(String username, Skill skill) {
-        Account account = accountService.getOne(username);
+    public void create(Account account, Skill skill) {
         skill.setAccount(account);
         skillRepository.save(skill);
     }

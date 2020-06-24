@@ -42,10 +42,9 @@ public class AccountService {
         return accountRepository.findByUsernameContaining(username);
     }
 
-    public String getActiveAccount() {
+    public Account getActiveAccount() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        return username;
+        Account account = getOne(auth.getName());
+        return account;
     }
-
 }

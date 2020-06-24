@@ -19,21 +19,19 @@ public class ConnectionRequestController {
     @Autowired
     private AccountService accountService;
 
-    @PostMapping("/profiles/sendRequest/{username}")
+    @PostMapping("/profiles/{username}/sendRequest")
     public String sendRequest(@PathVariable String username) {
-        String activeUser = accountService.getActiveAccount();
-        Account from = accountService.getOne(activeUser);
+        Account from = accountService.getActiveAccount();
         Account to = accountService.getOne(username);
         connectionService.sendRequest(from, to);
 
-        return "redirect:/profiles";
+        return "redirect:/profiles/";
     }
 
-    @PostMapping("/profiles/acceptRequest")
-    public String acceptRequest(@RequestParam String username) {
+    @PostMapping("/profiles/{username}/acceptRequest")
+    public String acceptRequest(@PathVariable String username) {
         Account from = accountService.getOne(username);
-        String activeUser = accountService.getActiveAccount();
-        Account to = accountService.getOne(activeUser);
+        Account to = accountService.getActiveAccount();
 
         //connect
         connectionService.connectAccounts(from, to);
@@ -42,30 +40,27 @@ public class ConnectionRequestController {
         //delete request
         connectionService.deleteRequest(to, from);
 
-        return "redirect:/profiles";
+        return "redirect:/profiles/" + to.getUsername();
     }
 
-    @PostMapping("/profiles/rejectRequest")
-    public String rejectRequest(@RequestParam String username) {
+    @PostMapping("/profiles/{username}/rejectRequest")
+    public String rejectRequest(@PathVariable String username) {
         Account from = accountService.getOne(username);
-        String activeUser = accountService.getActiveAccount();
-        Account to = accountService.getOne(activeUser);
+        Account to = accountService.getActiveAccount();
         connectionService.deleteRequest(to, from);
 
-        return "redirect:/profiles";
+        return "redirect:/profiles/" + to.getUsername();
     }
 
-    @PostMapping("/profiles/disconnect/")
-    public String disconnect(@RequestParam String username) {
-        String activeUser = accountService.getActiveAccount();
-        Account from = accountService.getOne(activeUser);
+    @PostMapping("/profiles/{username}/disconnect")
+    public String disconnect(@PathVariable String username) {
+        Account from = accountService.getActiveAccount();
         Account to = accountService.getOne(username);
-        
+
         connectionService.disconnectAccounts(from, to);
         accountService.update(to);
         accountService.update(from);
 
-        return "redirect:/profiles";
+        return "redirect:/profiles/" + from.getUsername();
     }
-
 }
