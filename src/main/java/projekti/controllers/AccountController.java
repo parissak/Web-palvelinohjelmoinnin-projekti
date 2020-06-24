@@ -63,6 +63,10 @@ public class AccountController {
         if (bindingResult.hasErrors()) {
             return "register";
         }
+        if (!accountService.isUniqueUsername(account.getUsername())) {
+            bindingResult.rejectValue("username", "error.username", "Username exists, please choose another");
+            return "register";
+        }
         accountService.create(account);
         return "redirect:/profiles/mypage";
     }

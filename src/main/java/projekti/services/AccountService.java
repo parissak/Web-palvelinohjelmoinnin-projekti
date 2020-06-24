@@ -42,6 +42,13 @@ public class AccountService {
         return accountRepository.findByUsernameContaining(username);
     }
 
+    public boolean isUniqueUsername(String username) {
+        if (accountRepository.findByUsername(username) == null) {
+            return true;
+        }
+        return false;
+    }
+
     public Account getActiveAccount() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Account account = getOne(auth.getName());
