@@ -2,6 +2,7 @@ package projekti.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import projekti.models.Account;
@@ -19,6 +20,7 @@ public class MessageService {
     @Autowired
     private MessageCommentRepository messageCommentRepository;
 
+    @Transactional
     public List<Message> findAssociatedTopSortedMessages(Account account) {
         return messageRepository.findTop25ByPosterOrPosterInOrderByStampDesc(account, account.getConnections());
     }
@@ -51,5 +53,4 @@ public class MessageService {
         messageComment.setMessage(message);
         saveComment(messageComment);
     }
-
 }

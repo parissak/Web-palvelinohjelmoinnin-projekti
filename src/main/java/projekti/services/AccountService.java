@@ -42,6 +42,7 @@ public class AccountService {
         return accountRepository.findByUsernameContaining(username);
     }
 
+    @Transactional
     public boolean isUniqueUsername(String username) {
         if (accountRepository.findByUsername(username) == null) {
             return true;

@@ -2,6 +2,7 @@ package projekti.services;
 
 import java.sql.Connection;
 import java.util.List;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import projekti.models.ConnectionRequest;
@@ -18,10 +19,12 @@ public class ConnectionService {
         connectionRequestRepository.save(connectionRequest);
     }
 
+    @Transactional
     public List<ConnectionRequest> getConnectionRequests(Account account) {
         return connectionRequestRepository.findByaccountTo(account);
     }
 
+    @Transactional
     public void deleteRequest(Account to, Account from) {
         ConnectionRequest request = connectionRequestRepository.findByAccountToAndAccountFrom(to, from);
         connectionRequestRepository.delete(request);
@@ -44,4 +47,18 @@ public class ConnectionService {
         from.getConnections().remove(to);
     }
 
+    public boolean requestExists(Account from, Account to) {
+        if (connectionRequestRepository.findByAccountToAndAccountFrom(to, from) == null
+                && connectionRequestRepository.findByAccountToAndAccountFrom(from, to) == null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean connectionExists(Account from, Account to) {
+        if (!from.getConnections().contains(to) || !to.getConnections().contains(from)) {
+            return true;
+        }
+        return false;
+    }
 }

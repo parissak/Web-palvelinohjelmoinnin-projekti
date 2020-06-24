@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import projekti.models.Account;
 import projekti.models.ConnectionRequest;
+import projekti.repositories.ConnectionRequestRepository;
 import projekti.services.AccountService;
 import projekti.services.ConnectionService;
 
@@ -23,7 +24,10 @@ public class ConnectionRequestController {
     public String sendRequest(@PathVariable String username) {
         Account from = accountService.getActiveAccount();
         Account to = accountService.getOne(username);
-        connectionService.sendRequest(from, to);
+
+        if (connectionService.requestExists(from, to) && connectionService.connectionExists(from, to)) {
+            connectionService.sendRequest(from, to);
+        }
 
         return "redirect:/profiles/";
     }

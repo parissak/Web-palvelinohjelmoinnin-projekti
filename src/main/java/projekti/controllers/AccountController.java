@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import projekti.models.Account;
 import projekti.models.Skill;
+import projekti.models.SkillComment;
 
 import projekti.services.AccountService;
 import projekti.services.SkillService;
