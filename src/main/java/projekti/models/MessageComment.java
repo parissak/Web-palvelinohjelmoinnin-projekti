@@ -19,6 +19,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @AllArgsConstructor
 public class MessageComment extends AbstractPersistable<Long> {
 
+    @NotEmpty
     private String comment;
     
     private LocalDateTime stamp;
