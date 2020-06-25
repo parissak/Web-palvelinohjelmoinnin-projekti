@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Entity;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -38,8 +37,8 @@ public class Message extends AbstractPersistable<Long> {
     private List<MessageComment> comments;
 
     public List<MessageComment> getComments() {
-        if (comments.size() > 5) {
-            return comments.subList(comments.size() - 5, comments.size());
+        if (comments.size() > 10) {
+            return comments.subList(comments.size() - 10, comments.size());
         }
         return comments;
     }

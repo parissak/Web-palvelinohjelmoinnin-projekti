@@ -1,6 +1,5 @@
 package projekti.services;
 
-import java.sql.Connection;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

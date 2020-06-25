@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import projekti.models.Account;
-import projekti.models.AccountPhoto;
 import projekti.models.Skill;
-import projekti.models.SkillComment;
-import projekti.repositories.AccountPhotoRepository;
 import projekti.services.AccountPhotoService;
 
 import projekti.services.AccountService;
@@ -91,7 +88,6 @@ public class AccountController {
     @GetMapping("/profiles/mypage")
     public String getMyProfile(@ModelAttribute Account account) {
         String activeUsername = accountService.getActiveAccount().getUsername();
-        System.out.println(activeUsername);
         return "redirect:/profiles/" + activeUsername;
     }
 
