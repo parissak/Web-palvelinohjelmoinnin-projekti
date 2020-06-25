@@ -9,11 +9,13 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -52,5 +54,7 @@ public class Account extends AbstractPersistable<Long> {
 
     @ManyToMany(mappedBy = "liker")
     private Set<Message> messageliked = new HashSet<>();
-    
+
+    @OneToOne(mappedBy = "account")
+    private AccountPhoto accountPhoto;
 }

@@ -1,5 +1,6 @@
 package projekti.controllers;
 
+import java.io.IOException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,9 +11,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import projekti.models.Account;
+import projekti.models.AccountPhoto;
 import projekti.models.Skill;
 import projekti.models.SkillComment;
+import projekti.repositories.AccountPhotoRepository;
+import projekti.services.AccountPhotoService;
 
 import projekti.services.AccountService;
 import projekti.services.SkillService;
@@ -29,6 +35,9 @@ public class AccountController {
 
     @Autowired
     private ConnectionService connectionService;
+
+    @Autowired
+    private AccountPhotoService accountPhotoService;
 
     //list all profiles
     @GetMapping("/profiles")
@@ -82,6 +91,32 @@ public class AccountController {
     @GetMapping("/profiles/mypage")
     public String getMyProfile(@ModelAttribute Account account) {
         String activeUsername = accountService.getActiveAccount().getUsername();
+        System.out.println(activeUsername);
         return "redirect:/profiles/" + activeUsername;
+    }
+
+    //save profile photo
+    @PostMapping("/profiles/profile/image")
+    public String postPhoto(@RequestParam("file") MultipartFile file) throws IOException {
+        Account account = accountService.getActiveAccount();
+
+        if (file.isEmpty()) {
+            return "redirect:/profiles/" + account.getUsername();
+        }
+
+        if (account.getAccountPhoto() != null) {
+            accountPhotoService.deletePhoto(account);
+        }
+
+        accountPhotoService.savePhoto(account, file);
+
+        return "redirect:/profiles/" + account.getUsername();
+    }
+
+    //get profile photo
+    @GetMapping(path = "/profiles/{id}/photo", produces = "image/png")
+    @ResponseBody
+    public byte[] get(@PathVariable Long id) {
+        return accountPhotoService.getPhoto(id);
     }
 }

@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 public class MessageComment extends AbstractPersistable<Long> {
 
     private String comment;
+    
     private LocalDateTime stamp;
 
     @ManyToOne

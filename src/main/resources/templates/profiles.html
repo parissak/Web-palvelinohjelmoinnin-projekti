@@ -39,7 +39,7 @@
                         <td class="col-sm">
                             <a class="text-dark" th:href="@{/profiles/{name}(name=${account.username})}" th:text="${account.username}"></a>
                         </td>
-                        <td class="col-sm">
+                        <td class="col-sm" th:if="${account.username} != ${#authentication.getPrincipal().getUsername()}" sec:authorize="{isAuthenticated()}">
                             <form method="POST" th:action="@{/profiles/{name}/sendRequest(name=${account.username})}">
                                 <div class="input-group">
                                     <input class="btn btn-outline-dark btn-sm" type="submit" value="Send Connection Request"></input>

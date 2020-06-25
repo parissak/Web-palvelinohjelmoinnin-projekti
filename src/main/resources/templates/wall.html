@@ -14,6 +14,28 @@
         <!-- account data -->
         <div th:each="data : ${account}" class="container mb-5">
             <h2>Profile</h2>
+            <!-- photo -->
+            <div class="row"> 
+                <div class="col-sm-4" >
+                    <img th:if="${account.accountPhoto != null}" th:src="@{/profiles/{id}/photo(id=${account.accountPhoto.id})}" 
+                         alt="profilePhoto" class="img-thumbnail">
+                </div>
+                <div class="col-sm-4">
+                    <form th:if="${data.username} == ${#authentication.getPrincipal().getUsername()}" 
+                          th:action="@{/profiles/profile/image}" method="POST" enctype="multipart/form-data"> 
+                        <div class="input-group  ">
+                            <div class="custom-file">
+                                <input type="file" name="file" class="custom-file-input" id="inputGroupFile">
+                                    <label class="custom-file-label" for="inputGroupFile">Choose profile photo</label>
+                            </div>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-outline-secondary">Upload</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-sm-2">
                     <label class="font-weight-bold">Name</label>
@@ -21,14 +43,8 @@
                 <div class="col-sm-2">
                     <p class="text-left mb-0" th:text="${data.name}"></p>
                 </div>
-                <div class="col-sm-2" th:if="${data.username} != ${#authentication.getPrincipal().getUsername()} ">
-                    <form method="POST" th:action="@{/profiles/{name}/sendRequest(name=${account.username})}">
-                        <div class="input-group">
-                            <input class="btn btn-outline-dark btn-sm" type="submit" value="Send Connection Request"></input>
-                        </div>
-                    </form>
-                </div>
             </div>
+
             <div class="row">
                 <div class="col-sm-2">
                     <label class="font-weight-bold">Username</label>
@@ -38,6 +54,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- connections -->
         <div class="container mb-5">
