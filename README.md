@@ -12,5 +12,10 @@ Helsingin yliopiston kurssin [Web-palvelinohjelmointi Java 2020](https://web-pal
 * Postaaminen yhteiselle sivulle
 * Postausten tykkääminen ja kommentoiminen
 
+## Sovelluksen puuttuvat ominaisuudet ja ongelmakohdat
+* N+1 -kyselyn ongelmat (ainakin postauksien ja niiden kommenttien näyttämisessä)
+* Osaa syötteistä ei ole validoitu
+* Testien puuttuminen
+
 ## Sovellus verkossa
 Sovellus sijaitsee myös [Herokun palvelussa](https://intense-harbor-77342.herokuapp.com/).
