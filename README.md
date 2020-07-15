@@ -3,6 +3,8 @@
 ## Tarkoitus
 Helsingin yliopiston kurssin [Web-palvelinohjelmointi Java 2020](https://web-palvelinohjelmointi-20.mooc.fi/projekti) projektityö, minkä aiheena on ollut "ansioluettelo- ja työntekijähakusovellus eli tuttavallisemmin vanhan kansan LinkedIn".
 
+Tehty Springia, Thymeleafia ja Twitter Bootstrapia käyttäen.
+
 ## Toteutetut toiminnallisuudet
 * Käyttäjien rekisteröityminen
 * Käyttäjien etsiminen ja yhdistäminen
